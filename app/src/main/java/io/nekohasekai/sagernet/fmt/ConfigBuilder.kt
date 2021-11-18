@@ -34,6 +34,7 @@ import io.nekohasekai.sagernet.IPv6Mode
 import io.nekohasekai.sagernet.Key
 import io.nekohasekai.sagernet.SagerNet
 import io.nekohasekai.sagernet.TunImplementation
+import io.nekohasekai.sagernet.bg.VpnService
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.database.ProxyEntity
 import io.nekohasekai.sagernet.database.SagerDatabase
@@ -161,6 +162,7 @@ fun buildV2RayConfig(
         .mapNotNull { dns -> dns.trim().takeIf { it.isNotBlank() && !it.startsWith("#") } }
     if (DataStore.useLocalDnsAsDirectDns) directDNS = listOf("localhost")
     val enableDnsRouting = DataStore.enableDnsRouting
+    val useFakeDns = DataStore.enableFakeDns
     val trafficSniffing = DataStore.trafficSniffing
     val indexMap = ArrayList<IndexEntity>()
     var requireWs = false
@@ -211,6 +213,20 @@ fun buildV2RayConfig(
 
             disableFallbackIfMatch = true
 
+            if (useFakeDns) {
+                fakedns = mutableListOf()
+                fakedns.add(FakeDnsObject().apply {
+                    ipPool = "${VpnService.FAKEDNS_VLAN4_CLIENT}/15"
+                    poolSize = 65535
+                })
+                if (ipv6Mode != IPv6Mode.DISABLE) {
+                    fakedns.add(FakeDnsObject().apply {
+                        ipPool = "${VpnService.FAKEDNS_VLAN6_CLIENT}/18"
+                        poolSize = 65535
+                    })
+                }
+            }
+
             when (ipv6Mode) {
                 IPv6Mode.DISABLE -> {
                     queryStrategy = "UseIPv4"
@@ -251,10 +267,15 @@ fun buildV2RayConfig(
                     auth = "noauth"
                     udp = true
                 })
-            if (trafficSniffing) {
+            if (trafficSniffing || useFakeDns) {
                 sniffing = InboundObject.SniffingObject().apply {
                     enabled = true
-                    destOverride = listOf("http", "tls", "quic")
+                    destOverride = when {
+                        useFakeDns && !trafficSniffing -> listOf("fakedns")
+                        useFakeDns -> listOf("fakedns", "http", "tls", "quic")
+                        else -> listOf("http", "tls", "quic")
+                    }
+                    metadataOnly = useFakeDns && !trafficSniffing
                     routeOnly = !destinationOverride
                 }
             }
@@ -270,10 +291,15 @@ fun buildV2RayConfig(
                     HTTPInboundConfigurationObject().apply {
                         allowTransparent = true
                     })
-                if (trafficSniffing) {
+                if (trafficSniffing || useFakeDns) {
                     sniffing = InboundObject.SniffingObject().apply {
                         enabled = true
-                        destOverride = listOf("http", "tls", "quic")
+                        destOverride = when {
+                            useFakeDns && !trafficSniffing -> listOf("fakedns")
+                            useFakeDns -> listOf("fakedns", "http", "tls", "quic")
+                            else -> listOf("http", "tls", "quic")
+                        }
+                        metadataOnly = useFakeDns && !trafficSniffing
                         routeOnly = !destinationOverride
                     }
                 }
@@ -291,10 +317,15 @@ fun buildV2RayConfig(
                         network = "tcp,udp"
                         followRedirect = true
                     })
-                if (trafficSniffing) {
+                if (trafficSniffing || useFakeDns) {
                     sniffing = InboundObject.SniffingObject().apply {
                         enabled = true
-                        destOverride = listOf("http", "tls", "quic")
+                        destOverride = when {
+                            useFakeDns && !trafficSniffing -> listOf("fakedns")
+                            useFakeDns -> listOf("fakedns", "http", "tls", "quic")
+                            else -> listOf("http", "tls", "quic")
+                        }
+                        metadataOnly = useFakeDns && !trafficSniffing
                         routeOnly = !destinationOverride
                     }
                 }
@@ -1328,6 +1359,21 @@ fun buildV2RayConfig(
                     }
                 }
             })
+        }
+
+        if (useFakeDns) {
+            if (bypassDomain.isNotEmpty()) {
+                dns.servers.add(0, DnsObject.StringOrServerObject().apply {
+                    valueY = DnsObject.ServerObject().apply {
+                        address = "fakedns"
+                        domains = bypassDomain.toList()
+                    }
+                })
+            } else {
+               dns.servers.add(0, DnsObject.StringOrServerObject().apply {
+                   valueX = "fakedns"
+               })
+            }
         }
 
         routing.rules.add(0, RoutingObject.RuleObject().apply {
