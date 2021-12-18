@@ -262,6 +262,7 @@ class VpnService : BaseVpnService(),
         }
 
         val useFakeDns = DataStore.enableFakeDns
+        val hijackDns = DataStore.hijackDns
         val ipv6Mode = DataStore.ipv6Mode
 
         builder.addAddress(PRIVATE_VLAN4_CLIENT, 30)
@@ -378,6 +379,7 @@ class VpnService : BaseVpnService(),
             sniffing = DataStore.trafficSniffing
             overrideDestination = DataStore.destinationOverride
             fakeDNS = DataStore.enableFakeDns
+            hijackDNS = DataStore.hijackDns
             debug = DataStore.enableLog
             dumpUID = data.proxy!!.config.dumpUid
             trafficStats = DataStore.appTrafficStatistics

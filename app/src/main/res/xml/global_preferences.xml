@@ -225,6 +225,11 @@
             app:summary="@string/fakedns_message"
             app:title="@string/enable_fakedns" />
         <SwitchPreference
+            app:icon="@drawable/ic_action_lock"
+            app:key="hijackDns"
+            app:summary="@string/hijack_dns_message"
+            app:title="@string/hijack_dns" />
+        <SwitchPreference
             app:icon="@drawable/ic_baseline_import_contacts_24"
             app:key="disableDnsExpire"
             app:summary="@string/disable_dns_expire_summary"

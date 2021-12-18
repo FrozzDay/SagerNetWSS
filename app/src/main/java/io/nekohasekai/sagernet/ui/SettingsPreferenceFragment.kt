@@ -153,6 +153,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
 
         val enableDnsRouting = findPreference<SwitchPreference>(Key.ENABLE_DNS_ROUTING)!!
         val enableFakeDns = findPreference<SwitchPreference>(Key.ENABLE_FAKEDNS)!!
+        val hijackDns = findPreference<SwitchPreference>(Key.HIJACK_DNS)!!
         val disableDnsExpire = findPreference<SwitchPreference>(Key.DISABLE_DNS_EXPIRE)!!
 
         val requireTransproxy = findPreference<SwitchPreference>(Key.REQUIRE_TRANSPROXY)!!
@@ -262,6 +263,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         remoteDns.onPreferenceChangeListener = reloadListener
         directDns.onPreferenceChangeListener = reloadListener
         enableFakeDns.onPreferenceChangeListener = reloadListener
+        hijackDns.onPreferenceChangeListener = reloadListener
         dnsHosts.onPreferenceChangeListener = reloadListener
         enableDnsRouting.onPreferenceChangeListener = reloadListener
         disableDnsExpire.onPreferenceChangeListener = reloadListener

@@ -163,6 +163,7 @@ fun buildV2RayConfig(
     if (DataStore.useLocalDnsAsDirectDns) directDNS = listOf("localhost")
     val enableDnsRouting = DataStore.enableDnsRouting
     val useFakeDns = DataStore.enableFakeDns
+    val hijackDns = DataStore.hijackDns
     val trafficSniffing = DataStore.trafficSniffing
     val indexMap = ArrayList<IndexEntity>()
     var requireWs = false
@@ -1376,11 +1377,13 @@ fun buildV2RayConfig(
             }
         }
 
-        routing.rules.add(0, RoutingObject.RuleObject().apply {
-            type = "field"
-            protocol = listOf("dns")
-            outboundTag = TAG_DNS_OUT
-        })
+        if (!hijackDns) {
+            routing.rules.add(0, RoutingObject.RuleObject().apply {
+                type = "field"
+                protocol = listOf("dns")
+                outboundTag = TAG_DNS_OUT
+            })
+        }
 
         if (!forTest) {
             routing.rules.add(0, RoutingObject.RuleObject().apply {
