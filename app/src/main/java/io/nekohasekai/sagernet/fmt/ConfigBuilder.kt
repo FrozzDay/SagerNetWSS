@@ -199,15 +199,7 @@ fun buildV2RayConfig(
             servers.addAll(remoteDns.map {
                 DnsObject.StringOrServerObject().apply {
                     valueY = DnsObject.ServerObject().apply {
-                        var url = it
-                        if (it != "localhost") {
-                            val lnk = Libcore.parseURL(it)
-                            if (lnk.scheme.isBlank()) {
-                                lnk.scheme = "udp"
-                            }
-                            url = lnk.string
-                        }
-                        address = url
+                        address = it
                     }
                 }
             })
@@ -1285,7 +1277,6 @@ fun buildV2RayConfig(
                 DNSOutboundConfigurationObject().apply {
                     userLevel = 1
                     var dns = remoteDns.first()
-                    if (!dns.contains("://")) dns = "udp://$dns"
                     val uri = Uri.parse(dns)
                     address = uri.host
                     if (uri.port > 0) {
@@ -1338,23 +1329,7 @@ fun buildV2RayConfig(
             dns.servers.addAll(directDNS.map {
                 DnsObject.StringOrServerObject().apply {
                     valueY = DnsObject.ServerObject().apply {
-                        var url = it
-                        if (it != "localhost") {
-                            val lnk = Libcore.parseURL(it)
-                            if (lnk.scheme.isBlank()) {
-                                lnk.scheme = "udp+local"
-                            } else {
-                                lnk.scheme = when (lnk.scheme) {
-                                    "https" -> "https+local"
-                                    "quic" -> "quic+local"
-                                    "tcp" -> "tcp+local"
-                                    "udp" -> "udp+local"
-                                    else -> lnk.scheme
-                                }
-                            }
-                            url = lnk.string
-                        }
-                        address = url
+                        address = it
                         domains = bypassDomain.toList()
                         skipFallback = true
                     }
