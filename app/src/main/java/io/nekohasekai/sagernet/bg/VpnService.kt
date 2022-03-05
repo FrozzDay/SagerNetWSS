@@ -115,7 +115,6 @@ class VpnService : BaseVpnService(),
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     override fun killProcesses() {
-        Libcore.setLocalhostResolver(null)
         tun?.apply {
             close()
         }
@@ -185,7 +184,6 @@ class VpnService : BaseVpnService(),
                 }
             }
         }
-        Libcore.setLocalhostResolver(this)
     }
 
     inner class NullConnectionException : NullPointerException(),
@@ -222,7 +220,6 @@ class VpnService : BaseVpnService(),
 
     private fun startVpn() {
         instance = this
-        Libcore.setLocalhostResolver(this)
 
         var mtuFinal = 0
         if (useUpstreamInterfaceMTU) {
@@ -389,6 +386,7 @@ class VpnService : BaseVpnService(),
 
             errorHandler = this@VpnService
             protector = this@VpnService
+            localResolver = this@VpnService
         }
 
         tun = Libcore.newTun2ray(config)

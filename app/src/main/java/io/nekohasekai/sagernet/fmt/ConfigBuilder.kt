@@ -205,7 +205,6 @@ fun buildV2RayConfig(
                             url = lnk.string
                         }
                         address = url
-                        concurrency = true
                     }
                 }
             })
@@ -1314,9 +1313,9 @@ fun buildV2RayConfig(
                                 lnk.scheme = "udp+local"
                             } else {
                                 lnk.scheme = when (lnk.scheme) {
-                                    "tls" -> "tls+local"
                                     "https" -> "https+local"
                                     "quic" -> "quic+local"
+                                    "tcp" -> "tcp+local"
                                     "udp" -> "udp+local"
                                     else -> lnk.scheme
                                 }
@@ -1326,7 +1325,6 @@ fun buildV2RayConfig(
                         address = url
                         domains = bypassDomain.toList()
                         skipFallback = true
-                        concurrency = true
                     }
                 }
             })

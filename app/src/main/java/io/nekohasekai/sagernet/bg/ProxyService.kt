@@ -59,7 +59,6 @@ class ProxyService : Service(),
                 }
             }
         }
-        Libcore.setLocalhostResolver(this)
     }
 
     override var wakeLock: PowerManager.WakeLock? = null
@@ -72,7 +71,6 @@ class ProxyService : Service(),
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     override fun killProcesses() {
-        Libcore.setLocalhostResolver(null)
         super.killProcesses()
         GlobalScope.launch(Dispatchers.Default) { DefaultNetworkListener.stop(this) }
     }
