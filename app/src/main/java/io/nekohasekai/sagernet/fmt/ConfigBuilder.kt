@@ -196,14 +196,6 @@ fun buildV2RayConfig(
                 .toMutableMap()
             servers = mutableListOf()
 
-            servers.addAll(remoteDns.map {
-                DnsObject.StringOrServerObject().apply {
-                    valueY = DnsObject.ServerObject().apply {
-                        address = it
-                    }
-                }
-            })
-
             disableFallbackIfMatch = true
 
             if (useFakeDns) {
@@ -1292,6 +1284,7 @@ fun buildV2RayConfig(
 
         val bypassIP = HashSet<String>()
         val bypassDomain = HashSet<String>()
+        val proxyDomain = HashSet<String>()
 
         (proxies + extraProxies.values.flatten()).forEach {
             it.requireBean().apply {
@@ -1317,6 +1310,11 @@ fun buildV2RayConfig(
                     bypassDomain.addAll(bypassRule.domains.split("\n"))
                 }
             }
+            for (proxyRule in extraRules.filter { it.isProxyRule() }) {
+                if (proxyRule.domains.isNotBlank()) {
+                    proxyDomain.addAll(proxyRule.domains.split("\n"))
+                }
+            }
         }
 
         remoteDns.forEach { dns ->
@@ -1326,12 +1324,28 @@ fun buildV2RayConfig(
         }
 
         if (bypassDomain.isNotEmpty()) {
+            dns.servers.addAll(remoteDns.map {
+                DnsObject.StringOrServerObject().apply {
+                    valueY = DnsObject.ServerObject().apply {
+                        address = it
+                        domains = proxyDomain.toList()
+                    }
+                }
+            })
             dns.servers.addAll(directDNS.map {
                 DnsObject.StringOrServerObject().apply {
                     valueY = DnsObject.ServerObject().apply {
                         address = it
                         domains = bypassDomain.toList()
                         skipFallback = true
+                    }
+                }
+            })
+        } else {
+            dns.servers.addAll(remoteDns.map {
+                DnsObject.StringOrServerObject().apply {
+                    valueY = DnsObject.ServerObject().apply {
+                        address = it
                     }
                 }
             })
@@ -1342,7 +1356,7 @@ fun buildV2RayConfig(
                 dns.servers.add(0, DnsObject.StringOrServerObject().apply {
                     valueY = DnsObject.ServerObject().apply {
                         address = "fakedns"
-                        domains = bypassDomain.toList()
+                        domains = bypassDomain.union(proxyDomain).toList()
                     }
                 })
             } else {
