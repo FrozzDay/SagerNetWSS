@@ -92,6 +92,7 @@ object Key {
     const val PROVIDER_ROOT_CA = "providerRootCA"
     const val PROVIDER_INSTALLER = "providerInstaller"
 
+    const val UTLS_FINGERPRINT = "utlsFingerprint"
     const val TUN_IMPLEMENTATION = "tunImplementation"
     const val ENABLE_PCAP = "enablePcap"
     const val MTU = "mtu"

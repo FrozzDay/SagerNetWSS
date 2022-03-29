@@ -191,6 +191,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
             newValue
         }
 
+        val utlsFingerprint = findPreference<SimpleMenuPreference>(Key.UTLS_FINGERPRINT)!!
         val appTrafficStatistics = findPreference<SwitchPreference>(Key.APP_TRAFFIC_STATISTICS)!!
         val profileTrafficStatistics = findPreference<SwitchPreference>(Key.PROFILE_TRAFFIC_STATISTICS)!!
         speedInterval.isEnabled = profileTrafficStatistics.isChecked
@@ -278,6 +279,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         enableLog.onPreferenceChangeListener = reloadListener
 
         providerTrojan.onPreferenceChangeListener = reloadListener
+        utlsFingerprint.onPreferenceChangeListener = reloadListener
         appTrafficStatistics.onPreferenceChangeListener = reloadListener
         tunImplementation.onPreferenceChangeListener = reloadListener
         destinationOverride.onPreferenceChangeListener = reloadListener
