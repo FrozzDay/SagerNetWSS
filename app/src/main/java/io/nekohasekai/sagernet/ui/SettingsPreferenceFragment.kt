@@ -171,6 +171,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
             true
         }
 
+        val providerShadowsocks = findPreference<SimpleMenuPreference>(Key.PROVIDER_SHADOWSOCKS)!!
         val providerTrojan = findPreference<SimpleMenuPreference>(Key.PROVIDER_TROJAN)!!
         val dnsHosts = findPreference<EditTextPreference>(Key.DNS_HOSTS)!!
 
@@ -278,6 +279,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
 
         enableLog.onPreferenceChangeListener = reloadListener
 
+        providerShadowsocks.onPreferenceChangeListener = reloadListener
         providerTrojan.onPreferenceChangeListener = reloadListener
         utlsFingerprint.onPreferenceChangeListener = reloadListener
         appTrafficStatistics.onPreferenceChangeListener = reloadListener

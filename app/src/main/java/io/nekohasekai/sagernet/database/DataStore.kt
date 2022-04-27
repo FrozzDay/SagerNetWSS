@@ -215,6 +215,7 @@ object DataStore : OnPreferenceDataStoreChangeListener {
 
     // protocol
 
+    var providerShadowsocks by configurationStore.stringToInt(Key.PROVIDER_SHADOWSOCKS)
     var providerTrojan by configurationStore.stringToInt(Key.PROVIDER_TROJAN)
     var providerRootCA by configurationStore.stringToInt(Key.PROVIDER_ROOT_CA)
     var providerInstaller by configurationStore.stringToInt(Key.PROVIDER_INSTALLER)

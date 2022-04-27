@@ -620,8 +620,8 @@ public class V2RayConfig {
         public Integer port;
         public String method;
         public String password;
-        public String key;
-        public Boolean reducedIvHeadEntropy;
+        public Boolean uot;
+        public Boolean encryptedProtocolExtension;
 
     }
 

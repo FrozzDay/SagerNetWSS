@@ -88,6 +88,7 @@ object Key {
 
     const val ALWAYS_SHOW_ADDRESS = "alwaysShowAddress"
 
+    const val PROVIDER_SHADOWSOCKS = "providerShadowsocks"
     const val PROVIDER_TROJAN = "providerTrojan"
     const val PROVIDER_ROOT_CA = "providerRootCA"
     const val PROVIDER_INSTALLER = "providerInstaller"
@@ -221,6 +222,11 @@ object Key {
 object TunImplementation {
     const val GVISOR = 0
     const val SYSTEM = 1
+}
+
+object ShadowsocksProvider {
+    const val V2RAY = 0
+    const val SING = 1
 }
 
 object TrojanProvider {

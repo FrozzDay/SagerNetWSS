@@ -573,6 +573,16 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="shadowsocks_provider">
+        <item>V2Ray</item>
+        <item>Sing</item>
+    </string-array>
+
+    <string-array name="shadowsocks_provider_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string-array name="trojan_provider">
         <item>V2Ray</item>
         <item>Trojan-Go</item>
