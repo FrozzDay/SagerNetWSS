@@ -33,6 +33,7 @@ import com.v2ray.core.common.net.packetaddr.PacketAddrType
 import io.nekohasekai.sagernet.IPv6Mode
 import io.nekohasekai.sagernet.Key
 import io.nekohasekai.sagernet.SagerNet
+import io.nekohasekai.sagernet.TrojanProvider
 import io.nekohasekai.sagernet.TunImplementation
 import io.nekohasekai.sagernet.bg.VpnService
 import io.nekohasekai.sagernet.database.DataStore
@@ -822,7 +823,7 @@ fun buildV2RayConfig(
                                             }
                                         }
                                     })
-                            } else if (bean is TrojanBean && bean.security != "xtls") {
+                            } else if (DataStore.providerTrojan == TrojanProvider.SING && bean is TrojanBean && bean.security == "tls") {
                                 protocol = "trojan_sing"
                                 settings = LazyOutboundConfigurationObject(this,
                                     TrojanSingOutboundConfigurationObject().apply {

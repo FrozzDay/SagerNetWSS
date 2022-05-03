@@ -227,6 +227,7 @@ object TrojanProvider {
     const val V2RAY = 0
     const val TROJAN = 1
     const val TROJAN_GO = 2
+    const val SING = 3
 }
 
 object RootCAProvider {
