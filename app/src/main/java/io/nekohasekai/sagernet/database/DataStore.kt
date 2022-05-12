@@ -116,7 +116,7 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     // https://github.com/SagerNet/SagerNet/issues/180
     var remoteDns by configurationStore.stringNotBlack(Key.REMOTE_DNS) { "1.1.1.1" }
     var directDns by configurationStore.stringNotBlack(Key.DIRECT_DNS) { "223.5.5.5" }
-    var useLocalDnsAsDirectDns by configurationStore.boolean(Key.USE_LOCAL_DNS_AS_DIRECT_DNS) { true }
+    var useLocalDnsAsDirectDns by configurationStore.boolean(Key.USE_LOCAL_DNS_AS_DIRECT_DNS)
     var enableFakeDns by configurationStore.boolean(Key.ENABLE_FAKEDNS)
     var hijackDns by configurationStore.boolean(Key.HIJACK_DNS)
     var hosts by configurationStore.string(Key.DNS_HOSTS)
