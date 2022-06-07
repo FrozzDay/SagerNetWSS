@@ -176,7 +176,7 @@ fun buildV2RayConfig(
     val needIncludeSelf = DataStore.tunImplementation == TunImplementation.SYSTEM
 
     val outboundDomainStrategy = when {
-        destinationOverride && !resolveDestination -> "AsIs"
+        !resolveDestination -> "AsIs"
         ipv6Mode == IPv6Mode.DISABLE -> "UseIPv4"
         ipv6Mode == IPv6Mode.PREFER -> "PreferIPv6"
         ipv6Mode == IPv6Mode.ONLY -> "UseIPv6"
