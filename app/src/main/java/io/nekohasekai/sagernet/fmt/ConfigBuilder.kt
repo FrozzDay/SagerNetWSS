@@ -533,6 +533,7 @@ fun buildV2RayConfig(
                                     }
                                 }
                             } else if (bean is StandardV2RayBean) {
+                                val isTrojanSing = DataStore.providerTrojan == TrojanProvider.SING && bean.security == "tls" && bean.type == "tcp" && bean.headerType == "none" && utlsFingerprint.isBlank()
                                 if (bean is VMessBean) {
                                     protocol = "vmess"
                                     settings = LazyOutboundConfigurationObject(this,
@@ -595,8 +596,44 @@ fun buildV2RayConfig(
                                                 PacketAddrType.XUDP_VALUE -> packetEncoding = "xudp"
                                             }
                                         })
+                                } else if (bean is TrojanBean) {
+                                    if (isTrojanSing) {
+                                        protocol = "trojan_sing"
+                                        settings = LazyOutboundConfigurationObject(this,
+                                            TrojanSingOutboundConfigurationObject().apply {
+                                                address = bean.serverAddress
+                                                port = bean.serverPort
+                                                password = bean.password
+                                                if (bean.sni.isNotBlank()) {
+                                                    serverName = bean.sni
+                                                }
+                                                if (bean.alpn.isNotBlank()) {
+                                                    nextProtos = bean.alpn.split("\n")
+                                                }
+                                                if (bean.allowInsecure) {
+                                                    insecure = true
+                                                }
+                                            })
+                                    } else {
+                                        protocol = "trojan"
+                                        settings = LazyOutboundConfigurationObject(this,
+                                            TrojanOutboundConfigurationObject().apply {
+                                                servers = listOf(TrojanOutboundConfigurationObject.ServerObject()
+                                                    .apply {
+                                                        address = bean.serverAddress
+                                                        port = bean.serverPort
+                                                        password = bean.password
+                                                        if (bean.flow.isNotBlank()) {
+                                                            flow = bean.flow
+                                                        } else if (bean.security == "xtls") {
+                                                            flow = "xtls-rprx-direct"
+                                                        }
+                                                    })
+                                            })
+                                    }
                                 }
 
+                            if (bean !is TrojanBean || !isTrojanSing) {
                                 streamSettings = StreamSettingsObject().apply {
                                     network = bean.type
                                     if (bean.security.isNotBlank()) {
@@ -758,6 +795,7 @@ fun buildV2RayConfig(
                                     }
 
                                 }
+                            }
                             } else if (DataStore.providerShadowsocks == ShadowsocksProvider.SING && bean is ShadowsocksBean && bean.method in methodsSing && bean.plugin.isBlank()) {
                                 protocol = "shadowsocks_sing"
                                 settings = LazyOutboundConfigurationObject(this,
@@ -839,78 +877,6 @@ fun buildV2RayConfig(
                                             }
                                         }
                                     })
-                            } else if (DataStore.providerTrojan == TrojanProvider.SING && bean is TrojanBean && bean.security == "tls") {
-                                protocol = "trojan_sing"
-                                settings = LazyOutboundConfigurationObject(this,
-                                    TrojanSingOutboundConfigurationObject().apply {
-                                        address = bean.serverAddress
-                                        port = bean.serverPort
-                                        password = bean.password
-                                        if (bean.sni.isNotBlank()) {
-                                            serverName = bean.sni
-                                        }
-                                        if (bean.alpn.isNotBlank()) {
-                                            nextProtos = bean.alpn.split("\n")
-                                        }
-                                        if (bean.allowInsecure) {
-                                            insecure = true
-                                        }
-                                    })
-                            } else if (bean is TrojanBean) {
-                                protocol = "trojan"
-                                settings = LazyOutboundConfigurationObject(this,
-                                    TrojanOutboundConfigurationObject().apply {
-                                        servers = listOf(TrojanOutboundConfigurationObject.ServerObject()
-                                            .apply {
-                                                address = bean.serverAddress
-                                                port = bean.serverPort
-                                                password = bean.password
-                                                if (bean.flow.isNotBlank()) {
-                                                    flow = bean.flow
-                                                } else if (bean.security == "xtls") {
-                                                    flow = "xtls-rprx-direct"
-                                                }
-                                            })
-                                    })
-                                streamSettings = StreamSettingsObject().apply {
-                                    network = "tcp"
-                                    when (bean.security) {
-                                        "xtls" -> {
-                                            security = bean.security
-                                            xtlsSettings = TLSObject().apply {
-                                                if (bean.sni.isNotBlank()) {
-                                                    serverName = bean.sni
-                                                }
-                                                if (bean.alpn.isNotBlank()) {
-                                                    alpn = bean.alpn.split("\n")
-                                                }
-                                            }
-                                        }
-                                        else -> {
-                                            security = "tls"
-                                            tlsSettings = TLSObject().apply {
-                                                if (bean.sni.isNotBlank()) {
-                                                    serverName = bean.sni
-                                                }
-                                                if (bean.alpn.isNotBlank()) {
-                                                    alpn = bean.alpn.split("\n")
-                                                }
-                                                if (utlsFingerprint.isNotBlank()) {
-                                                    fingerprint = utlsFingerprint
-                                                }
-                                            }
-                                            if (bean.allowInsecure) {
-                                                tlsSettings = tlsSettings ?: TLSObject()
-                                                tlsSettings.allowInsecure = true
-                                            }
-                                        }
-                                    }
-                                    if (needKeepAliveInterval) {
-                                        sockopt = StreamSettingsObject.SockoptObject().apply {
-                                            tcpKeepAliveInterval = keepAliveInterval
-                                        }
-                                    }
-                                }
                             } else if (bean is WireGuardBean) {
                                 protocol = "wireguard"
                                 settings = LazyOutboundConfigurationObject(this,
