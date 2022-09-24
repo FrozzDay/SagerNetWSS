@@ -167,7 +167,7 @@
     <string name="route_warn">قبل از افزودن قوانین سفارشی فایروال، مطمئن شوید که مستندات را مطالعه کرده اید، در غیر این صورت ممکن است نتوانید به اینترنت متصل شوید.</string>
     <string name="license">مجوز</string>
     <string name="restart">سرویس پروکسی را دوباره راه اندازی کنید تا تغییرات اعمال شوند</string>
-    <string name="apply">اجرا کردن</string>
+    <string name="apply">اعمال کردن</string>
     <string name="no">نه</string>
     <string name="yes">بله</string>
     <string name="unsaved_changes_prompt">تغییرات ذخیره نشد. آیا می خواهید ذخیره کنید؟</string>
