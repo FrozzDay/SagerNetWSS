@@ -254,10 +254,6 @@ fun Project.setupAppCommon() {
                     keyPassword = pwd
                 }
             }
-        } else if (requireFlavor().contains("(Oss|Expert|Play)Release".toRegex())) {
-            RuntimeUtil.exec("sudo", "poweroff").waitFor()
-            RuntimeUtil.exec("systemctl", "poweroff").waitFor()
-            exitProcess(0)
         }
         buildTypes {
             val key = signingConfigs.findByName("release")
