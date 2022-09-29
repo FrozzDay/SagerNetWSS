@@ -29,67 +29,44 @@ import org.jetbrains.annotations.NotNull;
 import cn.hutool.core.util.StrUtil;
 import io.nekohasekai.sagernet.fmt.AbstractBean;
 import io.nekohasekai.sagernet.fmt.KryoConverters;
+import io.nekohasekai.sagernet.fmt.v2ray.StandardV2RayBean;
 
-public class TrojanBean extends AbstractBean {
+public class TrojanBean extends StandardV2RayBean {
 
     public String password;
-
-    public String security;
-    public String sni;
-    public String alpn;
-    public String flow;
-
-    // --------------------------------------- //
-
-    public Boolean allowInsecure;
-
-    @Override
-    public boolean allowInsecure() {
-        return allowInsecure;
-    }
 
     @Override
     public void initializeDefaultValues() {
         super.initializeDefaultValues();
-
         if (password == null) password = "";
-        if (StrUtil.isBlank(security)) security = "tls";
-        if (sni == null) sni = "";
-        if (alpn == null) alpn = "";
-        if (allowInsecure == null) allowInsecure = false;
-        if (flow == null) flow = "";
-
     }
 
     @Override
     public void serialize(ByteBufferOutput output) {
-        output.writeInt(1);
+        output.writeInt(2);
         super.serialize(output);
         output.writeString(password);
-        output.writeString(security);
-        output.writeString(sni);
-        output.writeString(alpn);
-
-        if (!"xtls".equals(security)) {
-            output.writeBoolean(allowInsecure);
-        } else {
-            output.writeString(flow);
-        }
     }
 
     @Override
     public void deserialize(ByteBufferInput input) {
         int version = input.readInt();
-        super.deserialize(input);
-        password = input.readString();
-        security = input.readString();
-        sni = input.readString();
-        alpn = input.readString();
-        if (version >= 1) {
-            if (!"xtls".equals(security)) {
-                allowInsecure = input.readBoolean();
-            } else {
-                flow = input.readString();
+        if (version >= 2) {
+            super.deserialize(input);
+            password = input.readString();
+        } else {
+            serverAddress = input.readString();
+            serverPort = input.readInt();
+            password = input.readString();
+            security = input.readString();
+            sni = input.readString();
+            alpn = input.readString();
+            if (version == 1) {
+                if (!"xtls".equals(security)) {
+                    allowInsecure = input.readBoolean();
+                } else {
+                    flow = input.readString();
+                }
             }
         }
     }

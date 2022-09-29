@@ -69,6 +69,8 @@ class VpnService : BaseVpnService(),
         const val PRIVATE_VLAN4_GATEWAY = "172.19.0.2"
         const val PRIVATE_VLAN6_CLIENT = "fdfe:dcba:9876::1"
         const val PRIVATE_VLAN6_GATEWAY = "fdfe:dcba:9876::2"
+        const val FAKEDNS_VLAN4_CLIENT = "198.18.0.0"
+        const val FAKEDNS_VLAN6_CLIENT = "fc00::"
 
         private fun <T> FileDescriptor.use(block: (FileDescriptor) -> T) = try {
             block(this)
@@ -115,7 +117,6 @@ class VpnService : BaseVpnService(),
 
     @Suppress("EXPERIMENTAL_API_USAGE")
     override fun killProcesses() {
-        Libcore.setLocalhostResolver(null)
         tun?.apply {
             close()
         }
@@ -185,7 +186,6 @@ class VpnService : BaseVpnService(),
                 }
             }
         }
-        Libcore.setLocalhostResolver(this)
     }
 
     inner class NullConnectionException : NullPointerException(),
@@ -222,7 +222,6 @@ class VpnService : BaseVpnService(),
 
     private fun startVpn() {
         instance = this
-        Libcore.setLocalhostResolver(this)
 
         var mtuFinal = 0
         if (useUpstreamInterfaceMTU) {
@@ -261,12 +260,22 @@ class VpnService : BaseVpnService(),
         if (!useUpstreamInterfaceMTU) {
             builder.setMtu(mtuFinal)
         }
+
+        val useFakeDns = DataStore.enableFakeDns
+        val hijackDns = DataStore.hijackDns
         val ipv6Mode = DataStore.ipv6Mode
 
         builder.addAddress(PRIVATE_VLAN4_CLIENT, 30)
+        if (useFakeDns) {
+            builder.addAddress(FAKEDNS_VLAN4_CLIENT, 15)
+        }
 
         if (ipv6Mode != IPv6Mode.DISABLE) {
             builder.addAddress(PRIVATE_VLAN6_CLIENT, 126)
+
+            if (useFakeDns) {
+                builder.addAddress(FAKEDNS_VLAN6_CLIENT, 18)
+            }
         }
 
         if (DataStore.bypassLan && !DataStore.bypassLanInCoreOnly) {
@@ -369,6 +378,8 @@ class VpnService : BaseVpnService(),
             implementation = tunImplementation
             sniffing = DataStore.trafficSniffing
             overrideDestination = DataStore.destinationOverride
+            fakeDNS = DataStore.enableFakeDns
+            hijackDNS = DataStore.hijackDns
             debug = DataStore.enableLog
             dumpUID = data.proxy!!.config.dumpUid
             trafficStats = DataStore.appTrafficStatistics
@@ -389,6 +400,7 @@ class VpnService : BaseVpnService(),
 
             errorHandler = this@VpnService
             protector = this@VpnService
+            localResolver = this@VpnService
         }
 
         tun = Libcore.newTun2ray(config)

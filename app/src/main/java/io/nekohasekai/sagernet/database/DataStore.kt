@@ -114,9 +114,11 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var speedInterval by configurationStore.stringToInt(Key.SPEED_INTERVAL)
 
     // https://github.com/SagerNet/SagerNet/issues/180
-    var remoteDns by configurationStore.stringNotBlack(Key.REMOTE_DNS) { "tls://dns.google" }
-    var directDns by configurationStore.stringNotBlack(Key.DIRECT_DNS) { "tls+local://dot.pub" }
-    var useLocalDnsAsDirectDns by configurationStore.boolean(Key.USE_LOCAL_DNS_AS_DIRECT_DNS) { true }
+    var remoteDns by configurationStore.stringNotBlack(Key.REMOTE_DNS) { "1.1.1.1" }
+    var directDns by configurationStore.stringNotBlack(Key.DIRECT_DNS) { "223.5.5.5" }
+    var useLocalDnsAsDirectDns by configurationStore.boolean(Key.USE_LOCAL_DNS_AS_DIRECT_DNS)
+    var enableFakeDns by configurationStore.boolean(Key.ENABLE_FAKEDNS)
+    var hijackDns by configurationStore.boolean(Key.HIJACK_DNS)
     var hosts by configurationStore.string(Key.DNS_HOSTS)
     var enableDnsRouting by configurationStore.boolean(Key.ENABLE_DNS_ROUTING) { true }
     var disableDnsExpire by configurationStore.boolean(Key.DISABLE_DNS_EXPIRE)
@@ -202,6 +204,7 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var connectionTestURL by configurationStore.string(Key.CONNECTION_TEST_URL) { CONNECTION_TEST_URL }
     var alwaysShowAddress by configurationStore.boolean(Key.ALWAYS_SHOW_ADDRESS)
 
+    var utlsFingerprint by configurationStore.string(Key.UTLS_FINGERPRINT)
     var tunImplementation by configurationStore.stringToInt(Key.TUN_IMPLEMENTATION) { TunImplementation.SYSTEM }
 
     var useUpstreamInterfaceMTU by configurationStore.boolean(Key.USE_UPSTREAM_INTERFACE_MTU) { true }
@@ -212,6 +215,7 @@ object DataStore : OnPreferenceDataStoreChangeListener {
 
     // protocol
 
+    var providerShadowsocks by configurationStore.stringToInt(Key.PROVIDER_SHADOWSOCKS)
     var providerTrojan by configurationStore.stringToInt(Key.PROVIDER_TROJAN)
     var providerRootCA by configurationStore.stringToInt(Key.PROVIDER_ROOT_CA)
     var providerInstaller by configurationStore.stringToInt(Key.PROVIDER_INSTALLER)
