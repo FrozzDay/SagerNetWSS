@@ -70,7 +70,6 @@ public class V2RayConfig {
             public Boolean skipFallback;
             public List<String> domains;
             public List<String> expectIPs;
-            public boolean concurrency;
 
         }
 
@@ -621,8 +620,8 @@ public class V2RayConfig {
         public Integer port;
         public String method;
         public String password;
-        public String key;
-        public Boolean reducedIvHeadEntropy;
+        public Boolean uot;
+        public Boolean encryptedProtocolExtension;
 
     }
 
@@ -759,6 +758,7 @@ public class V2RayConfig {
         public List<CertificateObject> certificates;
         public Boolean disableSystemRoot;
         public List<String> pinnedPeerCertificateChainSha256;
+        public String fingerprint;
 
         public static class CertificateObject {
 

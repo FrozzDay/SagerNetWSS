@@ -573,14 +573,26 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="shadowsocks_provider">
+        <item>V2Ray</item>
+        <item>Sing</item>
+    </string-array>
+
+    <string-array name="shadowsocks_provider_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string-array name="trojan_provider">
         <item>V2Ray</item>
         <item>Trojan-Go</item>
+        <item>Sing</item>
     </string-array>
 
     <string-array name="trojan_provider_value">
         <item>0</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="group_types">
@@ -604,6 +616,22 @@
         <item>SOCKS4</item>
         <item>SOCKS4A</item>
         <item>SOCKS5</item>
+    </string-array>
+
+    <string-array name="utls_entry">
+        <item>DISABLED</item>
+        <item>CHROME</item>
+        <item>FIREFOX</item>
+        <item>SAFARI</item>
+        <item>RANDOMIZED</item>
+    </string-array>
+
+    <string-array name="utls_value">
+        <item />
+        <item>chrome</item>
+        <item>firefox</item>
+        <item>safari</item>
+        <item>randomized</item>
     </string-array>
 
     <string-array name="simple_obfs">

@@ -40,6 +40,8 @@ object Key {
     const val DIRECT_DNS = "directDns"
     const val USE_LOCAL_DNS_AS_DIRECT_DNS = "useLocalDnsAsDirectDns"
     const val ENABLE_DNS_ROUTING = "enableDnsRouting"
+    const val ENABLE_FAKEDNS = "enableFakeDns"
+    const val HIJACK_DNS = "hijackDns"
     const val DNS_HOSTS = "dnsHosts0"
     const val DISABLE_DNS_EXPIRE = "disableDnsExpire"
 
@@ -86,10 +88,12 @@ object Key {
 
     const val ALWAYS_SHOW_ADDRESS = "alwaysShowAddress"
 
+    const val PROVIDER_SHADOWSOCKS = "providerShadowsocks"
     const val PROVIDER_TROJAN = "providerTrojan"
     const val PROVIDER_ROOT_CA = "providerRootCA"
     const val PROVIDER_INSTALLER = "providerInstaller"
 
+    const val UTLS_FINGERPRINT = "utlsFingerprint"
     const val TUN_IMPLEMENTATION = "tunImplementation"
     const val ENABLE_PCAP = "enablePcap"
     const val MTU = "mtu"
@@ -220,10 +224,16 @@ object TunImplementation {
     const val SYSTEM = 1
 }
 
+object ShadowsocksProvider {
+    const val V2RAY = 0
+    const val SING = 1
+}
+
 object TrojanProvider {
     const val V2RAY = 0
     const val TROJAN = 1
     const val TROJAN_GO = 2
+    const val SING = 3
 }
 
 object RootCAProvider {

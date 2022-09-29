@@ -85,7 +85,6 @@ fun TrojanBean.toUri(): String {
     }
 
     return builder.string
-
 }
 
 fun TrojanBean.buildTrojanConfig(port: Int): String {

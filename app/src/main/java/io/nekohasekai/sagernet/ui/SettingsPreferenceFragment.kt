@@ -152,6 +152,8 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         }
 
         val enableDnsRouting = findPreference<SwitchPreference>(Key.ENABLE_DNS_ROUTING)!!
+        val enableFakeDns = findPreference<SwitchPreference>(Key.ENABLE_FAKEDNS)!!
+        val hijackDns = findPreference<SwitchPreference>(Key.HIJACK_DNS)!!
         val disableDnsExpire = findPreference<SwitchPreference>(Key.DISABLE_DNS_EXPIRE)!!
 
         val requireTransproxy = findPreference<SwitchPreference>(Key.REQUIRE_TRANSPROXY)!!
@@ -169,6 +171,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
             true
         }
 
+        val providerShadowsocks = findPreference<SimpleMenuPreference>(Key.PROVIDER_SHADOWSOCKS)!!
         val providerTrojan = findPreference<SimpleMenuPreference>(Key.PROVIDER_TROJAN)!!
         val dnsHosts = findPreference<EditTextPreference>(Key.DNS_HOSTS)!!
 
@@ -189,6 +192,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
             newValue
         }
 
+        val utlsFingerprint = findPreference<SimpleMenuPreference>(Key.UTLS_FINGERPRINT)!!
         val appTrafficStatistics = findPreference<SwitchPreference>(Key.APP_TRAFFIC_STATISTICS)!!
         val profileTrafficStatistics = findPreference<SwitchPreference>(Key.PROFILE_TRAFFIC_STATISTICS)!!
         speedInterval.isEnabled = profileTrafficStatistics.isChecked
@@ -260,6 +264,8 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
 
         remoteDns.onPreferenceChangeListener = reloadListener
         directDns.onPreferenceChangeListener = reloadListener
+        enableFakeDns.onPreferenceChangeListener = reloadListener
+        hijackDns.onPreferenceChangeListener = reloadListener
         dnsHosts.onPreferenceChangeListener = reloadListener
         enableDnsRouting.onPreferenceChangeListener = reloadListener
         disableDnsExpire.onPreferenceChangeListener = reloadListener
@@ -273,7 +279,9 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
 
         enableLog.onPreferenceChangeListener = reloadListener
 
+        providerShadowsocks.onPreferenceChangeListener = reloadListener
         providerTrojan.onPreferenceChangeListener = reloadListener
+        utlsFingerprint.onPreferenceChangeListener = reloadListener
         appTrafficStatistics.onPreferenceChangeListener = reloadListener
         tunImplementation.onPreferenceChangeListener = reloadListener
         destinationOverride.onPreferenceChangeListener = reloadListener

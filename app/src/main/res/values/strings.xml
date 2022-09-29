@@ -80,6 +80,10 @@
     <string name="direct_dns">Direct DNS</string>
     <string name="enable_dns_routing">Enable DNS Routing</string>
     <string name="dns_routing_message">Resolve domains in bypass routes with Direct DNS. Be aware of potential DNS leaks</string>
+    <string name="enable_fakedns">Enable FakeDNS</string>
+    <string name="fakedns_message">May cause other applications need to be restarted to reconnect to the network after proxy stopped</string>
+    <string name="hijack_dns">Hijack DNS</string>
+    <string name="hijack_dns_message">Hijack DNS in TUN instead of using DNS sniffer</string>
     <string name="dns_hosts">Domain rewrite</string>
     <string name="port_local_dns">Local DNS Port</string>
     <string name="require_transproxy">Enable Transproxy Inbound</string>
@@ -331,6 +335,7 @@
     <string name="bypass_lan_in_core_only">Bypass LAN in Core Only</string>
     <string name="bypass_lan_in_core_only_sum">If Lineage\'s "Allow hotspot clients to use VPNs" does not work, try this.</string>
     <string name="protocol_settings">Protocol Settings</string>
+    <string name="shadowsocks_provider">Shadowsocks Provider</string>
     <string name="trojan_provider">Trojan Provider</string>
     <string name="group_basic">Basic</string>
     <string name="group_settings">Group Settings</string>
@@ -391,6 +396,7 @@
     <string name="experimental_settings">Experimental</string>
     <string name="experimental_authenticated_length">Make the length of each payload segment no longer malleable. This experiment requires the server and client use the same version of v2ray-core. More breaking updates on this experiment is expected.</string>
     <string name="experimental_no_termination_signal">Do not send connection single duplex termination signal for TCP connection when transferred over VMess. This will break some application.</string>
+    <string name="utls_fingerprint">uTLS Fingerprint</string>
     <string name="hysteria_stream_receive_window">QUIC Stream Receive Window</string>
     <string name="hysteria_connection_receive_window">QUIC Connection Receive Window</string>
     <string name="hysteria_disable_mtu_discovery">Disable Path MTU Discovery</string>

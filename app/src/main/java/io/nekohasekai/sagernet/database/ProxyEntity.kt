@@ -392,7 +392,7 @@ data class ProxyEntity(
 
     fun needExternal(): Boolean {
         return when (type) {
-            TYPE_TROJAN -> DataStore.providerTrojan != TrojanProvider.V2RAY
+            TYPE_TROJAN -> DataStore.providerTrojan != TrojanProvider.V2RAY && DataStore.providerTrojan != TrojanProvider.SING && trojanBean!!.security == "tls" && trojanBean!!.type == "tcp" && trojanBean!!.headerType == "none"
             TYPE_TROJAN_GO -> true
             TYPE_NAIVE -> true
             TYPE_PING_TUNNEL -> true
