@@ -282,7 +282,7 @@ class AssetsActivity : ThemedActivity() {
                 fileName = "dlc.dat.xz"
             }
         } else {
-            repo = "Loyalsoldier/v2ray-rules-dat"
+            repo = "NextGenOP/v2ray-rules-dat-custom"
         }
 
         val client = Libcore.newHttpClient().apply {
